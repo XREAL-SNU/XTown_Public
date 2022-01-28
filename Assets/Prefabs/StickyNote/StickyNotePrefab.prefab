@@ -499,6 +499,8 @@ GameObject:
   m_Component:
   - component: {fileID: 5748472551323812737}
   - component: {fileID: 5748472551323812736}
+  - component: {fileID: 3999546461865984035}
+  - component: {fileID: 8072002514099239356}
   m_Layer: 0
   m_Name: StickyNotePrefab
   m_TagString: Untagged
@@ -549,6 +551,45 @@ MonoBehaviour:
   - {r: 0.47585443, g: 0.8679245, b: 0.45443216, a: 1}
   - {r: 1, g: 0.4009434, b: 0.4009434, a: 1}
   _colorChangerIcon: {fileID: 2851423142316090800}
+--- !u!114 &3999546461865984035
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5748472551323812750}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 2
+  observableSearch: 2
+  ObservedComponents:
+  - {fileID: 8072002514099239356}
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
+--- !u!114 &8072002514099239356
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5748472551323812750}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_UseLocal: 1
 --- !u!1 &5748472551392056867
 GameObject:
   m_ObjectHideFlags: 0
