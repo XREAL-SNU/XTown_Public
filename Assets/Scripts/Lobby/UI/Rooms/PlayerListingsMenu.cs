@@ -121,11 +121,8 @@ public class PlayerListingsMenu : MonoBehaviourPunCallbacks
             {
                 if(_listings[i].Player != PhotonNetwork.LocalPlayer)
                 {
-                    if (!_listings[i].Ready) 
-                    {
-                        Debug.Log("Not Ready is who " + _listings[i].Player.NickName);
+                    if (!_listings[i].Ready)
                         return;
-                    }
                 }
             }
             
@@ -147,7 +144,6 @@ public class PlayerListingsMenu : MonoBehaviourPunCallbacks
 
     public void OnClick_ReadyUp()
     {
-        if (PhotonNetwork.LocalPlayer == null) return; 
         if (!PhotonNetwork.IsMasterClient)
         {
             SetReadyUp(!_ready);

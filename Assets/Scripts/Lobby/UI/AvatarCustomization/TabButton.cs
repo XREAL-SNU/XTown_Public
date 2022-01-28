@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class TabButton : MonoBehaviour, IPointerEnterHandler, IPointerClickHandler, IPointerExitHandler
 {
     public TabGroup TabGroup;
-    public Image Background;
+    public Image background;
 
     public void OnPointerClick(PointerEventData eventData)
     {
@@ -26,7 +26,7 @@ public class TabButton : MonoBehaviour, IPointerEnterHandler, IPointerClickHandl
 
     private void Start()
     {
-        Background = GetComponent<Image>();
+        background = GetComponent<Image>();
         TabGroup.Subscribe(this);
     }
 }

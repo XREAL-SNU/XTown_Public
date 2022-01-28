@@ -14,13 +14,6 @@ public class TabGroup : MonoBehaviour
 
     public List<GameObject> Pages;
     // subscriber pattern for easy extension
-    
-    public void ResetTab()
-    {
-        SelectedTab = Tabs[0];
-        OnTabSelect(Tabs[0]);
-    }
-
     public void Subscribe(TabButton button)
     {
         if(Tabs is null)
@@ -30,7 +23,6 @@ public class TabGroup : MonoBehaviour
 
         Tabs.Add(button);
         SelectedTab = Tabs[0];
-        OnTabSelect(Tabs[0]);
     }
 
     public void OnTabEnter(TabButton button)
@@ -38,8 +30,8 @@ public class TabGroup : MonoBehaviour
         ResetTabs();
         if(SelectedTab == null || button != SelectedTab)
         {
-            button.Background.sprite = TabHoverImage;
-            button.Background.color = Color.cyan;
+            button.background.sprite = TabHoverImage;
+            button.background.color = Color.cyan;
         }
     }
 
@@ -52,8 +44,8 @@ public class TabGroup : MonoBehaviour
     {
         SelectedTab = button;
         ResetTabs();
-        button.Background.sprite = TabSelectedImage;
-        button.Background.color = Color.green;
+        button.background.sprite = TabSelectedImage;
+        button.background.color = Color.green;
 
         // select page based on order in hierarchy.
         int index = button.transform.GetSiblingIndex();
@@ -69,8 +61,8 @@ public class TabGroup : MonoBehaviour
         foreach(TabButton button in Tabs)
         {
             if (SelectedTab != null && button == SelectedTab) continue;
-            button.Background.sprite = TabDefaultImage;
-            button.Background.color = Color.white;
+            button.background.sprite = TabDefaultImage;
+            button.background.color = Color.white;
         }
     }
 }

@@ -64,10 +64,10 @@ public class TestConnect : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         Debug.Log("Player Joined Room, room_name:" + PhotonNetwork.CurrentRoom.Name +", actor number:" + PhotonNetwork.LocalPlayer.ActorNumber);
+        NetDebugConsole.Instance.DisplayMessage("joined room #" + PhotonNetwork.CurrentRoom.Name +", actor Number:" + PhotonNetwork.LocalPlayer.ActorNumber);
         LoadCharacter.Instance.PlayerControl.enabled = false;
         // activate the current room canvases
         RoomsCanvases.Instance.CurrentRoomCanvas.Show();
-        //MainCanvases.Instance.MainCanvas.Hide();
         RoomsCanvases.Instance.CurrentRoomCanvas.LinkedSceneName = RoomsCanvases.Instance.CreateOrJoinRoomCanvas.LinkedSceneName;
     }
     public override void OnMasterClientSwitched(Player newMasterClient)
@@ -77,31 +77,33 @@ public class TestConnect : MonoBehaviourPunCallbacks
     public override void OnLeftRoom()
     {
         Debug.Log("Player Left Room");
-        // loading the default scene.
+        // loading the default scene. -> this isn't a problem!
         PhotonNetwork.LoadLevel("MainRoom");
-
     }
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         Debug.Log("new player entered room! #" + newPlayer.ActorNumber + "name:" + newPlayer.NickName);
+        NetDebugConsole.Instance.DisplayMessage("new player name:" + newPlayer.NickName + " entered. currently " + PhotonNetwork.CurrentRoom.PlayerCount +" in room.");
     }
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
         Debug.Log("player left room! #" + otherPlayer.ActorNumber + "name:" + otherPlayer.NickName);
+        NetDebugConsole.Instance.DisplayMessage("player name:" + otherPlayer.NickName + " exited. currently " + PhotonNetwork.CurrentRoom.PlayerCount + " in room.");
+
     }
 
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
-        Debug.Log("TestConnect/RoomListUpdated");
+        
         foreach (RoomInfo info in roomList)
         {
+            Debug.Log("TestConnect/RoomInfo updates:" + info.Name);
             //Removed from rooms list.
             if (info.RemovedFromList)
             {
                 int index = _listings.FindIndex(x => x.RoomInfo.Name == info.Name);
                 if (index != -1)
                 {
-                    Debug.Log("TestConnect/RoomListRemoved " + _listings[index].RoomInfo.Name);
                     Destroy(_listings[index].gameObject);
                     _listings.RemoveAt(index);
                 }
