@@ -9,10 +9,10 @@ public class ContentRotator : MonoBehaviour, IDragHandler
     [SerializeField]
     private RectTransform _contentTransform;
 
-    // ÀÌ °ªÀÌ Å¬¼ö·Ï È¸Àü¿¡ ÇÊ¿äÇÑ ¸¶¿ì½º ¿òÁ÷ÀÓÀÌ ´õ Ä¿Áü. 
+    // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½ È¸ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ì½º ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ Ä¿ï¿½ï¿½. 
     private float _rotationSensitivity = 1;
 
-    // ÇÑ ¹ø¿¡ È¸ÀüÇÏ´Â °¢µµ
+    // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ È¸ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½
     private int _rotationAngle = 10;
 
     private int _minRotation = -60;
@@ -28,8 +28,7 @@ public class ContentRotator : MonoBehaviour, IDragHandler
         {
             _contentTransform.eulerAngles = new Vector3(_contentTransform.eulerAngles.x, _contentTransform.eulerAngles.y + _rotationAngle, _contentTransform.eulerAngles.z);
         }
-
-        // xÃà È¸ÀüÀº »ìÂ¦ ¹®Á¦°¡ ÀÖ¾î¼­ º¸·ù
+        // xï¿½ï¿½ È¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Â¦ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö¾î¼­ ï¿½ï¿½ï¿½ï¿½
         /*
         if (eventData.delta.y > _rotationSensitivity)
         {

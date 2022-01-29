@@ -1,18 +1,16 @@
-using Photon.Pun;
-using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using Photon.Pun;
 
 public class StickyNoteButton : MonoBehaviour
 {
     public GameObject stickyNotePrefab;
-    private static PhotonTransformView transformView;
-    private static PhotonView view;
-
     public void CreateStickyNote()
     {
-        Instantiate(stickyNotePrefab, Vector3.zero, Quaternion.identity);
+        if(StickyNoteNetworkManager.Instance.networked)
+            PhotonNetwork.Instantiate(stickyNotePrefab.name, Vector3.zero, Quaternion.identity);
+        else
+            Instantiate(stickyNotePrefab, Vector3.zero, Quaternion.identity);
     }
 }

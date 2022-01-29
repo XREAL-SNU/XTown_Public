@@ -2,21 +2,36 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using Photon.Pun;
+using Photon.Realtime;
 
 /// <summary>
-/// ÄÝ¶óÀÌ´õ°¡ Á¸ÀçÇÏ´Â °ÔÀÓ ³» ¿ÀºêÁ§Æ®¸¦ µå·¡±×·Î ÀÌµ¿ÇÒ ¼ö ÀÖ°Ô ÇÏ´Â Å¬·¡½º
+/// ï¿½Ý¶ï¿½ï¿½Ì´ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½å·¡ï¿½×·ï¿½ ï¿½Ìµï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ö°ï¿½ ï¿½Ï´ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½
 /// </summary>
 public class DragableUI : MonoBehaviour
 {
     private Vector3 _offset;
     private float _zCoord;
+    private static PhotonTransformView _transformView;
+    private static PhotonView _view;
 
+    void Start()
+    {
+        _transformView = GetComponent<PhotonTransformView>();
+        _view = GetComponent<PhotonView>();
+        if(!StickyNoteNetworkManager.Instance.networked)
+        {
+            _transformView.enabled = false;
+            _view.enabled = false;
+        }
+    }
+    
     void OnMouseDown()
     {
-        _zCoord = Camera.main.WorldToScreenPoint( gameObject.transform.position).z;
+        _zCoord = Camera.main.WorldToScreenPoint( transform.parent.transform.position).z;
 
         // Store offset = gameobject world pos - mouse world pos
-        _offset = gameObject.transform.position - GetMouseAsWorldPoint();
+        _offset = transform.parent.transform.position - GetMouseAsWorldPoint();
     }
 
     private Vector3 GetMouseAsWorldPoint()
@@ -33,6 +48,6 @@ public class DragableUI : MonoBehaviour
 
     void OnMouseDrag()
     {
-        transform.position = GetMouseAsWorldPoint() + _offset;
+        transform.parent.transform.position = GetMouseAsWorldPoint() + _offset;
     }
 }

@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Photon.Pun;
+using Photon.Pun.UtilityScripts;
+using Photon.Realtime;
 using DG.Tweening;
 using TMPro;
 
@@ -39,10 +42,20 @@ public class StickyNote : MonoBehaviour
     private bool _hoveringOnController;
     private bool _hoveringOnContent;
     private int _colorIndex = 0;
+    private bool _editing = false;
+    private static PhotonTransformView _transformView;
+    private static PhotonView _view;
 
     // Start is called before the first frame update
     void Start()
     {
+        _transformView = GetComponent<PhotonTransformView>();
+        _view = GetComponent<PhotonView>();
+        if(!StickyNoteNetworkManager.Instance.networked)
+        {
+            _transformView.enabled = false;
+            _view.enabled = false;
+        }
         _contentCollider.size = new Vector2(_contentTransform.rect.width, _contentTransform.rect.height);
         _controllerImage.transform.DOScale(0, 0);
         _hoveringOnController = false;
@@ -59,28 +72,34 @@ public class StickyNote : MonoBehaviour
         _controllerImage.transform.position = Camera.main.WorldToScreenPoint(_controllerTarget.position);
     }
 
-    // ½ºÆ¼Å°³ëÆ® ÆíÁýÇÏ´Â ÀÎÇ²ÇÊµå °ªÀÌ ¹Ù²ð ¶§¸¶´Ù ½ÇÁ¦ ½ºÆ¼Å°³ëÆ®¿¡ ¹Ý¿µÇÏ´Â ÇÔ¼ö
+    // ï¿½ï¿½Æ¼Å°ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½Ç²ï¿½Êµï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ù²ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ¼Å°ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½Ý¿ï¿½ï¿½Ï´ï¿½ ï¿½Ô¼ï¿½
     public void OnValueChanged(string value)
     {
-        _contentText.text = value;
+        if(StickyNoteNetworkManager.Instance.networked)
+        {
+            _view.RPC("TextUpdate",RpcTarget.All,value);
+        }
+        else{
+            _contentText.text = value;
+        }
     }
 
 
     #region PointerEvents
-    // ¸¶¿ì½º Æ÷ÀÎÅÍ°¡ ½ºÆ¼Å°³ëÆ® ÄÁÆ®·Ñ·¯ ¾ÈÀ¸·Î µé¾î°¬À» ¶§
+    // ï¿½ï¿½ï¿½ì½º ï¿½ï¿½ï¿½ï¿½ï¿½Í°ï¿½ ï¿½ï¿½Æ¼Å°ï¿½ï¿½Æ® ï¿½ï¿½Æ®ï¿½Ñ·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½î°¬ï¿½ï¿½ ï¿½ï¿½
     public void OnPointerEnterController()
     {
         _hoveringOnController = true;
     }
 
-    // ¸¶¿ì½º Æ÷ÀÎÅÍ°¡ ½ºÆ¼Å°³ëÆ® ÄÁÆ®·Ñ·¯ ¹ÛÀ¸·Î ³ª¿ÔÀ» ¶§
+    // ï¿½ï¿½ï¿½ì½º ï¿½ï¿½ï¿½ï¿½ï¿½Í°ï¿½ ï¿½ï¿½Æ¼Å°ï¿½ï¿½Æ® ï¿½ï¿½Æ®ï¿½Ñ·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
     public void OnPointerExitController()
     {
         _hoveringOnController = false;
         StartCoroutine(HideController());
     }
 
-    // ¸¶¿ì½º Æ÷ÀÎÅÍ°¡ ½ºÆ¼Å°³ëÆ® ¾ÈÀ¸·Î µé¾î°¬À» ¶§
+    // ï¿½ï¿½ï¿½ì½º ï¿½ï¿½ï¿½ï¿½ï¿½Í°ï¿½ ï¿½ï¿½Æ¼Å°ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½î°¬ï¿½ï¿½ ï¿½ï¿½
     public void OnPointerEnterContent()
     {
         _hoveringOnContent = true;
@@ -88,19 +107,19 @@ public class StickyNote : MonoBehaviour
         _colorChangerIcon.DOFade(1, 0.4f);
     }
 
-    // ¸¶¿ì½º Æ÷ÀÎÅÍ°¡ ½ºÆ¼Å°³ëÆ® ¹ÛÀ¸·Î ³ª¿ÔÀ» ¶§
+    // ï¿½ï¿½ï¿½ì½º ï¿½ï¿½ï¿½ï¿½ï¿½Í°ï¿½ ï¿½ï¿½Æ¼Å°ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
     public void OnPointerExitContent()
     {
         _hoveringOnContent = false;
         StartCoroutine(HideController());
     }
 
-    // ½ºÆ¼Å°³ëÆ® ÄÁÆ®·Ñ·¯ UI ¼û±â´Â ÄÚ·çÆ¾
+    // ï¿½ï¿½Æ¼Å°ï¿½ï¿½Æ® ï¿½ï¿½Æ®ï¿½Ñ·ï¿½ UI ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ú·ï¿½Æ¾
     IEnumerator HideController()
     {
         yield return new WaitForSeconds(0.5f);
         
-        // ¸¶¿ì½º Æ÷ÀÎÅÍ°¡ ½ºÆ¼Å°³ëÆ® ÄÁÆ®·Ñ·¯³ª ½ºÆ¼Å°³ëÆ® ÀÚÃ¼¿¡¼­ ¹þ¾î³µÀ» °æ¿ì, ½ºÆ¼Å°³ëÆ® ÄÁÆ®·Ñ·¯¸¦ ¼û±è
+        // ï¿½ï¿½ï¿½ì½º ï¿½ï¿½ï¿½ï¿½ï¿½Í°ï¿½ ï¿½ï¿½Æ¼Å°ï¿½ï¿½Æ® ï¿½ï¿½Æ®ï¿½Ñ·ï¿½ï¿½ï¿½ ï¿½ï¿½Æ¼Å°ï¿½ï¿½Æ® ï¿½ï¿½Ã¼ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½î³µï¿½ï¿½ ï¿½ï¿½ï¿½, ï¿½ï¿½Æ¼Å°ï¿½ï¿½Æ® ï¿½ï¿½Æ®ï¿½Ñ·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         if (_hoveringOnController || _hoveringOnContent)
         {
             yield return null;
@@ -114,28 +133,38 @@ public class StickyNote : MonoBehaviour
     #endregion
 
     #region ControllerCallbacks
-    // ½ºÆ¼Å°³ëÆ® ÄÁÆ®·Ñ·¯ÀÇ Edit ¹öÆ°À» ´­·¶À» ¶§
+    // ï¿½ï¿½Æ¼Å°ï¿½ï¿½Æ® ï¿½ï¿½Æ®ï¿½Ñ·ï¿½ï¿½ï¿½ Edit ï¿½ï¿½Æ°ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
     public void OnClick_Edit()
     {
+        if(_editing) return;
         _editCanvas.SetActive(true);
+        if(StickyNoteNetworkManager.Instance.networked){
+            _view.RPC("SwitchEditingTrue",RpcTarget.All);
+        }
         _editInputField.text = _contentText.text;
     }
 
-    // ½ºÆ¼Å°³ëÆ® ÄÁÆ®·Ñ·¯ÀÇ Remove ¹öÆ°À» ´­·¶À» ¶§
+    // ï¿½ï¿½Æ¼Å°ï¿½ï¿½Æ® ï¿½ï¿½Æ®ï¿½Ñ·ï¿½ï¿½ï¿½ Remove ï¿½ï¿½Æ°ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
     public void OnClick_Remove()
     {
-        Destroy(gameObject);
+        if(StickyNoteNetworkManager.Instance.networked){
+            PhotonNetwork.Destroy(gameObject);
+        }
+        else Destroy(gameObject);
     }
     #endregion
 
     #region ButtonCallbacks
-    // ½ºÆ¼Å°³ëÆ® ³»¿ë ÆíÁý ½Ã Confirm ¹öÆ°À» ´­·¶À» ¶§
+    // ï¿½ï¿½Æ¼Å°ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ Confirm ï¿½ï¿½Æ°ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
     public void OnClick_Confirm()
     {
+        if(StickyNoteNetworkManager.Instance.networked){
+            _view.RPC("SwitchEditingFalse",RpcTarget.All);
+        }
         _editCanvas.SetActive(false);
     }
 
-    // ½ºÆ¼Å°³ëÆ®ÀÇ »ö»ó º¯°æ ¹öÆ°À» ´­·¶À» ¶§
+    // ï¿½ï¿½Æ¼Å°ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ°ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
     public void OnClick_Color()
     {
         _colorIndex = GetNextColorIndex(_colorIndex);
@@ -156,4 +185,18 @@ public class StickyNote : MonoBehaviour
         }
     }
     #endregion
+    [PunRPC]
+    public void TextUpdate(string text)
+    {
+        _contentText.text = text;
+    }
+    private void SwitchEditingTrue()
+    {
+        _editing = true;
+    }
+    private void SwitchEditingFalse()
+    {
+        _editing = false;
+    }
+    
 }
