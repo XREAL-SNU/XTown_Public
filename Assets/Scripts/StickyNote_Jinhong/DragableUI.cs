@@ -10,6 +10,8 @@ using Photon.Realtime;
 /// </summary>
 public class DragableUI : MonoBehaviour
 {
+    [SerializeField]
+    private StickyNote _stickyNote;
     private Vector3 _offset;
     private float _zCoord;
     private static PhotonTransformView _transformView;
@@ -48,6 +50,9 @@ public class DragableUI : MonoBehaviour
 
     void OnMouseDrag()
     {
-        transform.parent.transform.position = GetMouseAsWorldPoint() + _offset;
+        if(!_stickyNote.isLocked)
+        {
+            transform.parent.transform.position = GetMouseAsWorldPoint() + _offset;
+        }
     }
 }

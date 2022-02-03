@@ -145,4 +145,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 107db742ca1836f448723aefce7b378f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stickyNotePrefab: {fileID: 5748472551323812750, guid: 9faa5de07c86a6a4e89f41fb7c55d3a2, type: 3}
+  stickyNotePrefab: {fileID: 5748472551323812750, guid: 996fc9572756fae43833fb7c4d799404, type: 3}
