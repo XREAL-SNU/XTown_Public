@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using TMPro;
 using DG.Tweening;
+using Photon.Pun;
 
 
 public class ControllerCanvas : MonoBehaviour
@@ -31,7 +32,7 @@ public class ControllerCanvas : MonoBehaviour
 
     void Start()
     {
-        // ÀÌº¥Æ® Æ®¸®°Å¿¡ ¸¶¿ì½º Æ÷ÀÎÅÍ Enter/Exit ÇÔ¼ö ¹ÙÀÎµù
+        // ï¿½Ìºï¿½Æ® Æ®ï¿½ï¿½ï¿½Å¿ï¿½ ï¿½ï¿½ï¿½ì½º ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Enter/Exit ï¿½Ô¼ï¿½ ï¿½ï¿½ï¿½Îµï¿½
         EventTrigger trigger = GetComponent<EventTrigger>();
         EventTrigger.Entry pointerEnterEntry = new EventTrigger.Entry();
         EventTrigger.Entry pointerExitEntry = new EventTrigger.Entry();
@@ -42,13 +43,13 @@ public class ControllerCanvas : MonoBehaviour
         trigger.triggers.Add(pointerEnterEntry);
         trigger.triggers.Add(pointerExitEntry);
 
-        // Lock ¹öÆ°¿¡ Àá±Ý ÇÔ¼ö ¹ÙÀÎµù
+        // Lock ï¿½ï¿½Æ°ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½ ï¿½ï¿½ï¿½Îµï¿½
         _lockButton.onClick.AddListener(OnClick_Lock);
 
-        // Edit ¹öÆ°¿¡ ³»¿ë ÆíÁý ÇÔ¼ö ¹ÙÀÎµù
+        // Edit ï¿½ï¿½Æ°ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½ ï¿½ï¿½ï¿½Îµï¿½
         _editButton.onClick.AddListener(OnClick_Edit);
 
-        // Remove ¹öÆ°¿¡ ½ºÆ¼Å°³ëÆ® Á¦°Å ÇÔ¼ö ¹ÙÀÎµù
+        // Remove ï¿½ï¿½Æ°ï¿½ï¿½ ï¿½ï¿½Æ¼Å°ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½ ï¿½ï¿½ï¿½Îµï¿½
         // _removeButton.onClick.AddListener(OnClick_Remove);
 
         EventTrigger removeTrigger = _removeButton.GetComponent<EventTrigger>();
@@ -61,14 +62,14 @@ public class ControllerCanvas : MonoBehaviour
         removeTrigger.triggers.Add(pointerDownEntry);
         removeTrigger.triggers.Add(pointerUpEntry);
 
-        // Scale ¹öÆ° ÀÌº¥Æ® Æ®¸®°Å¿¡ ½ºÄÉÀÏ ÇÔ¼ö ¹ÙÀÎµù
+        // Scale ï¿½ï¿½Æ° ï¿½Ìºï¿½Æ® Æ®ï¿½ï¿½ï¿½Å¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½ ï¿½ï¿½ï¿½Îµï¿½
         EventTrigger scaleTrigger = _scaleButton.GetComponent<EventTrigger>();
         EventTrigger.Entry scaleEntry = new EventTrigger.Entry();
         scaleEntry.eventID = EventTriggerType.Drag;
         scaleEntry.callback.AddListener((data) => { OnDrag_Scale((PointerEventData)data); });
         scaleTrigger.triggers.Add(scaleEntry);
 
-        // Rotate ¹öÆ° ÀÌº¥Æ® Æ®¸®°Å¿¡ È¸Àü ÇÔ¼ö ¹ÙÀÎµù
+        // Rotate ï¿½ï¿½Æ° ï¿½Ìºï¿½Æ® Æ®ï¿½ï¿½ï¿½Å¿ï¿½ È¸ï¿½ï¿½ ï¿½Ô¼ï¿½ ï¿½ï¿½ï¿½Îµï¿½
         EventTrigger rotateTrigger = _rotateButton.GetComponent<EventTrigger>();
         EventTrigger.Entry rotateEntry = new EventTrigger.Entry();
         rotateEntry.eventID = EventTriggerType.Drag;
@@ -92,12 +93,12 @@ public class ControllerCanvas : MonoBehaviour
         _stickyNote = stickyNote;
     }
 
-    // ½ºÆ¼Å°³ëÆ® ÄÁÆ®·Ñ·¯ UI¸¦ ¼û±â´Â ÄÚ·çÆ¾
+    // ï¿½ï¿½Æ¼Å°ï¿½ï¿½Æ® ï¿½ï¿½Æ®ï¿½Ñ·ï¿½ UIï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ú·ï¿½Æ¾
     public IEnumerator HideController()
     {
         yield return new WaitForSeconds(0.5f);
 
-        // ¸¶¿ì½º Æ÷ÀÎÅÍ°¡ ½ºÆ¼Å°³ëÆ® ÄÁÆ®·Ñ·¯³ª ½ºÆ¼Å°³ëÆ® ÀÚÃ¼¿¡¼­ ¹þ¾î³µÀ» °æ¿ì, ½ºÆ¼Å°³ëÆ® ÄÁÆ®·Ñ·¯¸¦ ¼û±è
+        // ï¿½ï¿½ï¿½ì½º ï¿½ï¿½ï¿½ï¿½ï¿½Í°ï¿½ ï¿½ï¿½Æ¼Å°ï¿½ï¿½Æ® ï¿½ï¿½Æ®ï¿½Ñ·ï¿½ï¿½ï¿½ ï¿½ï¿½Æ¼Å°ï¿½ï¿½Æ® ï¿½ï¿½Ã¼ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½î³µï¿½ï¿½ ï¿½ï¿½ï¿½, ï¿½ï¿½Æ¼Å°ï¿½ï¿½Æ® ï¿½ï¿½Æ®ï¿½Ñ·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         if (_hovering || _stickyNote.ContentCanvas.hovering)
         {
             yield return null;
@@ -109,32 +110,32 @@ public class ControllerCanvas : MonoBehaviour
         }
     }
 
-    // ½ºÆ¼Å°³ëÆ® ÄÁÆ®·Ñ·¯¿¡ ¸¶¿ì½º Æ÷ÀÎÅÍ°¡ µé¾î¿ÔÀ» ¶§
+    // ï¿½ï¿½Æ¼Å°ï¿½ï¿½Æ® ï¿½ï¿½Æ®ï¿½Ñ·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ì½º ï¿½ï¿½ï¿½ï¿½ï¿½Í°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
     public void OnPointerEnter(PointerEventData eventData)
     {
         _hovering = true;
     }
 
-    // ½ºÆ¼Å°³ëÆ® ÄÁÆ®·Ñ·¯·ÎºÎÅÍ ¸¶¿ì½º Æ÷ÀÎÅÍ°¡ ³ª°¬À» ¶§
+    // ï¿½ï¿½Æ¼Å°ï¿½ï¿½Æ® ï¿½ï¿½Æ®ï¿½Ñ·ï¿½ï¿½Îºï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ì½º ï¿½ï¿½ï¿½ï¿½ï¿½Í°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
     private void OnPointerExit(PointerEventData eventData)
     {
         _hovering = false;
         StartCoroutine(HideController());
     }
 
-    // ½ºÆ¼Å°³ëÆ® ÄÁÆ®·Ñ·¯ÀÇ Scale ¹öÆ°À» µå·¡±×ÇßÀ» ¶§
+    // ï¿½ï¿½Æ¼Å°ï¿½ï¿½Æ® ï¿½ï¿½Æ®ï¿½Ñ·ï¿½ï¿½ï¿½ Scale ï¿½ï¿½Æ°ï¿½ï¿½ ï¿½å·¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
     public void OnDrag_Scale(PointerEventData eventData)
     {
         _stickyNote.ContentCanvas.Scale(eventData.delta);
     }
 
-    // ½ºÆ¼Å°³ëÆ® ÄÁÆ®·Ñ·¯ÀÇ Rotate ¹öÆ°À» µå·¡±×ÇßÀ» ¶§
+    // ï¿½ï¿½Æ¼Å°ï¿½ï¿½Æ® ï¿½ï¿½Æ®ï¿½Ñ·ï¿½ï¿½ï¿½ Rotate ï¿½ï¿½Æ°ï¿½ï¿½ ï¿½å·¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
     public void OnDrag_Rotate(PointerEventData eventData)
     {
         _stickyNote.ContentCanvas.Rotate(eventData.delta);
     }
 
-    // ½ºÆ¼Å°³ëÆ® ÄÁÆ®·Ñ·¯ÀÇ Edit ¹öÆ°À» ´­·¶À» ¶§
+    // ï¿½ï¿½Æ¼Å°ï¿½ï¿½Æ® ï¿½ï¿½Æ®ï¿½Ñ·ï¿½ï¿½ï¿½ Edit ï¿½ï¿½Æ°ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
     public void OnClick_Edit()
     {
         _stickyNote.EditCanvas.Show();
@@ -151,7 +152,14 @@ public class ControllerCanvas : MonoBehaviour
 
         if (_removeProgressBar.done)
         {
-            Destroy(_stickyNote.gameObject);
+            if(!StickyNoteNetworkManager.Instance.networked)
+            {
+                Destroy(_stickyNote.gameObject);
+            }
+            else
+            {
+                PhotonNetwork.Destroy(_stickyNote.gameObject);
+            }
         }
     }
 
@@ -167,7 +175,7 @@ public class ControllerCanvas : MonoBehaviour
         }
     }
 
-    // ½ºÆ¼Å°³ëÆ® ÄÁÆ®·Ñ·¯ UI¸¦ ³ªÅ¸³ª°Ô ÇÏ´Â ÇÔ¼ö
+    // ï¿½ï¿½Æ¼Å°ï¿½ï¿½Æ® ï¿½ï¿½Æ®ï¿½Ñ·ï¿½ UIï¿½ï¿½ ï¿½ï¿½Å¸ï¿½ï¿½ï¿½ï¿½ ï¿½Ï´ï¿½ ï¿½Ô¼ï¿½
     public void ShowController()
     {
         _background.transform.DOScale(1, 0.4f);

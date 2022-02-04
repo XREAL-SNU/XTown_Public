@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using DG.Tweening;
 using TMPro;
+using Photon.Pun;
 
 public class ContentCanvas : MonoBehaviour
 {
@@ -31,31 +32,32 @@ public class ContentCanvas : MonoBehaviour
 
     private StickyNote _stickyNote;
 
-    // ½ºÄÉÀÏ Á¶Àý °ü·Ã º¯¼öµé
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     private float _scalingSpeed = 0.05f;
     private float _minScale = 1f;
     private float _maxScale = 10f;
     private float _newScaleX = 0f;
     private float _newScaleY = 0f;
 
-    // °¢µµ Á¶Àý °ü·Ã º¯¼öµé
-    private float _rotationSensitivity = 1; // ÀÌ °ªÀÌ Å¬¼ö·Ï È¸Àü¿¡ ÇÊ¿äÇÑ ¸¶¿ì½º ¿òÁ÷ÀÓÀÌ ´õ Ä¿Áü. 
-    private int _rotationAngle = 10; // ÇÑ ¹ø¿¡ È¸ÀüÇÏ´Â °¢µµ
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    private float _rotationSensitivity = 1; // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½ È¸ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ì½º ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ Ä¿ï¿½ï¿½. 
+    private int _rotationAngle = 10; // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ È¸ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½
     // private int _minRotation = -60;
     // private int _maxRotation = 60;
 
-    // ÆùÆ® Å©±â Á¶Àý °ü·Ã º¯¼öµé
+    // ï¿½ï¿½Æ® Å©ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     private float _fontSizingSpeed = 0.02f;
     private float _minFontSize = 0.15f;
     private float _maxFontSize = 0.6f;
     private float _newFontSize = 0f;
 
-    // ½ºÆ¼Å°³ëÆ® »ö»ó °ü·Ã º¯¼ö
+    // ï¿½ï¿½Æ¼Å°ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     private int _colorIndex = 0;
 
-    // ½ºÆ¼Å°³ëÆ® ´õºíÅ¬¸¯ ÀÎ½Ä °ü·Ã º¯¼ö
+    // ï¿½ï¿½Æ¼Å°ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½Å¬ï¿½ï¿½ ï¿½Î½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     private float _clickedTime;
     private float _doubleClickTime = 0.25f;
+    private static PhotonView _view;
 
     public void Initialize(StickyNote stickyNote)
     {
@@ -64,10 +66,10 @@ public class ContentCanvas : MonoBehaviour
 
     private void Start()
     {
-        // ½ºÆ¼Å°³ëÆ® »ö±ò º¯È­ ¹öÆ°¿¡ »ö±ò º¯È­ ÇÔ¼ö ¹ÙÀÎµù
+        // ï¿½ï¿½Æ¼Å°ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È­ ï¿½ï¿½Æ°ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È­ ï¿½Ô¼ï¿½ ï¿½ï¿½ï¿½Îµï¿½
         _colorChangerButton.onClick.AddListener(OnClick_Color);
 
-        // ÀÌº¥Æ® Æ®¸®°Å¿¡ ¸¶¿ì½º Æ÷ÀÎÅÍ Enter/Exit ÇÔ¼ö ¹ÙÀÎµù
+        // ï¿½Ìºï¿½Æ® Æ®ï¿½ï¿½ï¿½Å¿ï¿½ ï¿½ï¿½ï¿½ì½º ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Enter/Exit ï¿½Ô¼ï¿½ ï¿½ï¿½ï¿½Îµï¿½
         EventTrigger trigger = GetComponent<EventTrigger>();
         EventTrigger.Entry pointerEnterEntry = new EventTrigger.Entry();
         EventTrigger.Entry pointerExitEntry = new EventTrigger.Entry();
@@ -83,7 +85,7 @@ public class ContentCanvas : MonoBehaviour
         trigger.triggers.Add(scrollEntry);
 
 
-        // ÀÌº¥Æ® Æ®¸®°Å¿¡ ¸¶¿ì½º Å¬¸¯ ÇÔ¼ö ¹ÙÀÎµù (´õºíÅ¬¸¯ ÀÎ½Ä À§ÇØ¼­)
+        // ï¿½Ìºï¿½Æ® Æ®ï¿½ï¿½ï¿½Å¿ï¿½ ï¿½ï¿½ï¿½ì½º Å¬ï¿½ï¿½ ï¿½Ô¼ï¿½ ï¿½ï¿½ï¿½Îµï¿½ (ï¿½ï¿½ï¿½ï¿½Å¬ï¿½ï¿½ ï¿½Î½ï¿½ ï¿½ï¿½ï¿½Ø¼ï¿½)
         EventTrigger.Entry pointerDownEntry = new EventTrigger.Entry();
         pointerDownEntry.eventID = EventTriggerType.PointerDown;
         pointerDownEntry.callback.AddListener((data) => { OnPointerDown((PointerEventData)data); });
@@ -93,6 +95,7 @@ public class ContentCanvas : MonoBehaviour
         _colorChangerIcon.DOFade(0, 0);
         _collider.size = new Vector2(_rectTransform.rect.width, _rectTransform.rect.height);
         _hovering = false;
+        _view = GetComponent<PhotonView>();
     }
 
     public void Scale(Vector2 delta)
@@ -132,7 +135,7 @@ public class ContentCanvas : MonoBehaviour
             _rectTransform.eulerAngles = new Vector3(_rectTransform.eulerAngles.x, _rectTransform.eulerAngles.y + _rotationAngle, _rectTransform.eulerAngles.z);
         }
 
-        // xÃà È¸ÀüÀº »ìÂ¦ ¹®Á¦°¡ ÀÖ¾î¼­ º¸·ù
+        // xï¿½ï¿½ È¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Â¦ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö¾î¼­ ï¿½ï¿½ï¿½ï¿½
         /*
         if (eventData.delta.y > _rotationSensitivity)
         {
@@ -145,14 +148,19 @@ public class ContentCanvas : MonoBehaviour
         */
     }
 
-    // ½ºÆ¼Å°³ëÆ®ÀÇ »ö±òÀ» ¹Ù²Ù´Â ÇÔ¼ö
+    // ï¿½ï¿½Æ¼Å°ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ù²Ù´ï¿½ ï¿½Ô¼ï¿½
     public void OnClick_Color()
     {
         if (!_stickyNote.isLocked)
         {
-            _colorIndex = GetNextColorIndex(_colorIndex);
-            _contentImage.color = _backgroundColors[_colorIndex];
-            _colorChangerIcon.color = _backgroundColors[GetNextColorIndex(_colorIndex)];
+            if(!StickyNoteNetworkManager.Instance.networked)
+            {
+                ChangeColor();
+            }
+            else
+            {
+                _view.RPC("ChangeColor",RpcTarget.All);
+            }
         }
     }
 
@@ -168,13 +176,13 @@ public class ContentCanvas : MonoBehaviour
         }
     }
 
-    // ½ºÆ¼Å°³ëÆ®ÀÇ »ö±ò º¯È­ ¾ÆÀÌÄÜÀ» ¾Èº¸ÀÌ°Ô ÇÏ´Â ÇÔ¼ö
+    // ï¿½ï¿½Æ¼Å°ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È­ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Èºï¿½ï¿½Ì°ï¿½ ï¿½Ï´ï¿½ ï¿½Ô¼ï¿½
     public void HideColorIcon()
     {
         _colorChangerIcon.DOFade(0, 0.4f);
     }
 
-    // ½ºÆ¼Å°³ëÆ®¿¡ ¸¶¿ì½º Æ÷ÀÎÅÍ°¡ µé¾î¿ÔÀ» ¶§
+    // ï¿½ï¿½Æ¼Å°ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ì½º ï¿½ï¿½ï¿½ï¿½ï¿½Í°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
     public void OnPointerEnter(PointerEventData eventData)
     {
         _hovering = true;
@@ -182,21 +190,21 @@ public class ContentCanvas : MonoBehaviour
         _colorChangerIcon.DOFade(1, 0.4f);
     }
 
-    // ½ºÆ¼Å°³ëÆ®·ÎºÎÅÍ ¸¶¿ì½º Æ÷ÀÎÅÍ°¡ ³ª°¬À» ¶§
+    // ï¿½ï¿½Æ¼Å°ï¿½ï¿½Æ®ï¿½Îºï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ì½º ï¿½ï¿½ï¿½ï¿½ï¿½Í°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
     private void OnPointerExit(PointerEventData eventData)
     {
         _hovering = false;
         StartCoroutine(_stickyNote.ControllerCanvas.HideController());
     }
 
-    // ½ºÆ¼Å°³ëÆ®¿¡ ¸¶¿ì½º Å¬¸¯ÇßÀ» ¶§
+    // ï¿½ï¿½Æ¼Å°ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ì½º Å¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
     private void OnPointerDown(PointerEventData eventData)
     {
         float timeClickedBefore = _clickedTime;
         
         if (Time.time - timeClickedBefore < _doubleClickTime)
         {
-            // ´õºíÅ¬¸¯À¸·Î ÀÎ½Ä
+            // ï¿½ï¿½ï¿½ï¿½Å¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Î½ï¿½
             OnDoubleClick();
         }
         _clickedTime = Time.time;
@@ -231,13 +239,34 @@ public class ContentCanvas : MonoBehaviour
 
     private void ShowStickyNoteDetail(string text)
     {
-        GameObject go = Instantiate(Resources.Load("StickyNote/StickyNoteDetailCanvas") as GameObject, Vector3.zero, Quaternion.identity);
+        GameObject go = Instantiate(Resources.Load("StickyNoteDetailCanvas") as GameObject, Vector3.zero, Quaternion.identity);
         go.GetComponent<StickyNoteCanvas>().SetText(text);
     }
 
-    // ½ºÆ¼Å°³ëÆ® ÆíÁýÇÏ´Â ÀÎÇ²ÇÊµå °ªÀÌ ¹Ù²ð ¶§¸¶´Ù ½ÇÁ¦ ½ºÆ¼Å°³ëÆ®¿¡ ¹Ý¿µÇÏ´Â ÇÔ¼ö
+    // ï¿½ï¿½Æ¼Å°ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½Ç²ï¿½Êµï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ù²ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ¼Å°ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½Ý¿ï¿½ï¿½Ï´ï¿½ ï¿½Ô¼ï¿½
     public void OnValueChanged(string value)
+    {
+        Debug.Log("ValueChange");
+        if(!StickyNoteNetworkManager.Instance.networked)
+        {
+            ChangeText(value);
+        }else
+        {
+            _view.RPC("ChangeText",RpcTarget.All,value);
+        }
+    }
+
+    [PunRPC]
+    public void ChangeColor()
+    {
+        _colorIndex = GetNextColorIndex(_colorIndex);
+        _contentImage.color = _backgroundColors[_colorIndex];            
+        _colorChangerIcon.color = _backgroundColors[GetNextColorIndex(_colorIndex)];
+    }
+    [PunRPC]
+    public void ChangeText(string value)
     {
         _contentText.text = value;
     }
+
 }

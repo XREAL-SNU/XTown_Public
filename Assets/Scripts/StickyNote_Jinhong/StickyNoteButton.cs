@@ -8,6 +8,7 @@ public class StickyNoteButton : MonoBehaviour
     public GameObject stickyNotePrefab;
     public void CreateStickyNote()
     {
+        
         if(StickyNoteNetworkManager.Instance.networked)
             PhotonNetwork.Instantiate(stickyNotePrefab.name, Vector3.zero, Quaternion.identity);
         else

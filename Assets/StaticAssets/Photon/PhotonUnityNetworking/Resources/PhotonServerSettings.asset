@@ -43,6 +43,11 @@ MonoBehaviour:
   - TextUpdate
   - EditText
   - SetEdit
+  - ChangeColor
+  - InstantiateStickyNote
+  - SetEditDone
+  - ChangeText
+  - moveUI
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

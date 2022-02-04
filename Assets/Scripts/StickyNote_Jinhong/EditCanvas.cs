@@ -55,6 +55,7 @@ public class EditCanvas : MonoBehaviour
         {
             _view.RPC("SetEditDone",RpcTarget.All,_inputField.text);
         }
+        
         gameObject.SetActive(false);
     }
 
@@ -80,9 +81,10 @@ public class EditCanvas : MonoBehaviour
     {
         _stickyNote.CurrentState = StickyNoteState.Edit;
     }
+    [PunRPC]
     public void SetEditDone(string finalText)
     {
         _stickyNote.CurrentState = StickyNoteState.Idle;
-        _stickyNote.ContentCanvas.ContentText.text = finalText;
+        //_stickyNote.ContentCanvas.ContentText.text = finalText;
     }
 }
