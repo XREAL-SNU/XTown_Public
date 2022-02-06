@@ -6,6 +6,7 @@ using Photon.Pun;
 public class StickyNoteButton : MonoBehaviour
 {
     public GameObject stickyNotePrefab;
+
     public void CreateStickyNote()
     {
         

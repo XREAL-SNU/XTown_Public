@@ -81,6 +81,7 @@ public class ControllerCanvas : MonoBehaviour
 
         _background.transform.DOScale(0, 0);
         _hovering = false;
+        _stickyNote.Lock();
     }
 
     void Update()
@@ -165,14 +166,39 @@ public class ControllerCanvas : MonoBehaviour
 
     private void OnClick_Lock()
     {
-        if (_stickyNote.isLocked)
+        if(!StickyNoteNetworkManager.Instance.networked)
         {
-            _stickyNote.Unlock();
+            if (_stickyNote.isLocked)
+            {
+                UnLock();
+            }
+            else
+            {
+                Lock();
+            }
         }
         else
         {
-            _stickyNote.Lock();
+            if (_stickyNote.isLocked)
+            {
+                UnLock();
+                _stickyNote._view.RPC("Lock",RpcTarget.Others);
+            }
+            else
+            {
+                Lock();
+            }
         }
+    }
+    [PunRPC]
+    private void Lock()
+    {
+        _stickyNote.Lock();
+    }
+    [PunRPC]
+    private void UnLock()
+    {
+        _stickyNote.Unlock();
     }
 
     // ��ƼŰ��Ʈ ��Ʈ�ѷ� UI�� ��Ÿ���� �ϴ� �Լ�
@@ -193,6 +219,7 @@ public class ControllerCanvas : MonoBehaviour
     private void OnUnlock()
     {
         _lockButton.GetComponentInChildren<TMP_Text>().text = "Lock";
+        _stickyNote._view.TransferOwnership(PhotonNetwork.LocalPlayer.ActorNumber);
         _editButton.gameObject.SetActive(true);
         _scaleButton.gameObject.SetActive(true);
         _rotateButton.gameObject.SetActive(true);

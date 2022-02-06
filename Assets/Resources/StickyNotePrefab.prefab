@@ -809,6 +809,7 @@ MonoBehaviour:
   _contentCanvas: {fileID: 8690856689031848077}
   _controllerCanvas: {fileID: 9009554666645755609}
   _editCanvas: {fileID: 2167639533803918032}
+  _view: {fileID: 0}
 --- !u!114 &3999546461865984035
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -825,7 +826,7 @@ MonoBehaviour:
   Group: 0
   prefixField: -1
   Synchronization: 3
-  OwnershipTransfer: 2
+  OwnershipTransfer: 1
   observableSearch: 2
   ObservedComponents:
   - {fileID: 8072002514099239356}

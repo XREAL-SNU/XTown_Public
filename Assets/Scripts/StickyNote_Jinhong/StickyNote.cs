@@ -39,6 +39,8 @@ public class StickyNote : MonoBehaviour
 
     private StickyNoteState _currentState;
     public StickyNoteState CurrentState { get; set; }
+    
+    public PhotonView _view;
 
     private void Awake()
     {
@@ -47,14 +49,14 @@ public class StickyNote : MonoBehaviour
 
     private void Initialize()
     {
+        _view = GetComponent<PhotonView>();
         _contentCanvas.Initialize(this);
         _controllerCanvas.Initialize(this);
         _editCanvas.Initialize(this);
-
         _currentState = StickyNoteState.Idle;
     }
 
-
+    [PunRPC]
     public void Lock()
     {
         if (onLock != null)
@@ -63,7 +65,7 @@ public class StickyNote : MonoBehaviour
         }
         _isLocked = true;
     }
-
+    [PunRPC]
     public void Unlock()
     {
         if (onUnlock != null)

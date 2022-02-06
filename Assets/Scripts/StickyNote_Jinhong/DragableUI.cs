@@ -14,21 +14,24 @@ public class DragableUI : MonoBehaviour
     private Vector3 _offset;
     private float _zCoord;
     private static PhotonView _view;
+    private static PhotonTransformView _transformView;
 
     void Start()
     {
         _view = GetComponent<PhotonView>();
+        _transformView = GetComponent<PhotonTransformView>();
         if(!StickyNoteNetworkManager.Instance.networked)
         {
             _view.enabled = false;
+            _transformView.enabled = false;
         }
     }
     
     void OnMouseDown()
     {
-        _zCoord = Camera.main.WorldToScreenPoint(gameObject.transform.position).z;
+        _zCoord = Camera.main.WorldToScreenPoint(_stickyNote.transform.position).z;
         // Store offset = gameobject world pos - mouse world pos
-        _offset = gameObject.transform.position - GetMouseAsWorldPoint();
+        _offset = _stickyNote.transform.position - GetMouseAsWorldPoint();
     }
 
     private Vector3 GetMouseAsWorldPoint()
@@ -47,19 +50,20 @@ public class DragableUI : MonoBehaviour
     {
         if(!_stickyNote.isLocked)
         {
-            if(!StickyNoteNetworkManager.Instance.networked)
-            {
-                moveUI();
-            }
+            //if(!StickyNoteNetworkManager.Instance.networked)
+            //{
+            moveUI();
+            //}
+            /*
             else
             {
                 _view.RPC("moveUI",RpcTarget.All);
-            } 
+            }*/ 
         }
     }
     [PunRPC]
     void moveUI()
     {
-        transform.position = GetMouseAsWorldPoint() + _offset;
+        _stickyNote.transform.position = GetMouseAsWorldPoint() + _offset;
     }
 }
