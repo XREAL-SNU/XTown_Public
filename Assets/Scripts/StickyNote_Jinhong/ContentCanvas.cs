@@ -57,7 +57,8 @@ public class ContentCanvas : MonoBehaviour
     // ��ƼŰ��Ʈ ����Ŭ�� �ν� ���� ����
     private float _clickedTime;
     private float _doubleClickTime = 0.25f;
-    private static PhotonView _view;
+    public PhotonView _view;
+    public PhotonTransformView _transformView;
 
     public void Initialize(StickyNote stickyNote)
     {
@@ -96,6 +97,7 @@ public class ContentCanvas : MonoBehaviour
         _collider.size = new Vector2(_rectTransform.rect.width, _rectTransform.rect.height);
         _hovering = false;
         _view = GetComponent<PhotonView>();
+        _transformView = GetComponent<PhotonTransformView>();
     }
 
     public void Scale(Vector2 delta)

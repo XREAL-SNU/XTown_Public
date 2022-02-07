@@ -8,7 +8,6 @@ public class ContentRotator : MonoBehaviour, IDragHandler
 {
     [SerializeField]
     private RectTransform _contentTransform;
-
     // �� ���� Ŭ���� ȸ���� �ʿ��� ���콺 �������� �� Ŀ��. 
     private float _rotationSensitivity = 1;
 
@@ -28,17 +27,6 @@ public class ContentRotator : MonoBehaviour, IDragHandler
         {
             _contentTransform.eulerAngles = new Vector3(_contentTransform.eulerAngles.x, _contentTransform.eulerAngles.y + _rotationAngle, _contentTransform.eulerAngles.z);
         }
-        // x�� ȸ���� ��¦ ������ �־ ����
-        /*
-        if (eventData.delta.y > _rotationSensitivity)
-        {
-            _contentTransform.eulerAngles = new Vector3(Mathf.Clamp(_contentTransform.eulerAngles.x + _rotationAngle, _minRotation, _maxRotation), _contentTransform.eulerAngles.y, _contentTransform.eulerAngles.z);
-        }
-        else if (eventData.delta.y < -1 * _rotationSensitivity)
-        {
-            _contentTransform.eulerAngles = new Vector3(Mathf.Clamp(_contentTransform.eulerAngles.x - _rotationAngle, _minRotation, _maxRotation), _contentTransform.eulerAngles.y, _contentTransform.eulerAngles.z);
-        }
-        */
     }
 }
 

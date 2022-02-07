@@ -220,6 +220,7 @@ public class ControllerCanvas : MonoBehaviour
     {
         _lockButton.GetComponentInChildren<TMP_Text>().text = "Lock";
         _stickyNote._view.TransferOwnership(PhotonNetwork.LocalPlayer.ActorNumber);
+        _stickyNote.ContentCanvas._view.TransferOwnership(PhotonNetwork.LocalPlayer.ActorNumber);
         _editButton.gameObject.SetActive(true);
         _scaleButton.gameObject.SetActive(true);
         _rotateButton.gameObject.SetActive(true);

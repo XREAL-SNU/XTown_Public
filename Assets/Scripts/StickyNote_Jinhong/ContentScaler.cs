@@ -7,7 +7,7 @@ public class ContentScaler : MonoBehaviour, IDragHandler
 {
     [SerializeField]
     private Transform _contentTransform;
-
+    private ContentCanvas _contentCanvas;
     private float _scalingSpeed = 0.05f;
     private float _minScale = 1f;
     private float _maxScale = 10f;
@@ -37,6 +37,7 @@ public class ContentScaler : MonoBehaviour, IDragHandler
         _newScaleX = Mathf.Clamp(_newScaleX, _minScale, _maxScale);
         _newScaleY = Mathf.Clamp(_newScaleY, _minScale, _maxScale);
         _contentTransform.localScale = new Vector3(_newScaleX, _newScaleY,1);
+        //_contentCanvas._contentText.text = 
         
 
     }

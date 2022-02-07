@@ -671,6 +671,8 @@ MonoBehaviour:
   - {r: 0, g: 0.9811321, b: 0.06034063, a: 1}
   _colorChangerButton: {fileID: 2752687443174739599}
   _colorChangerIcon: {fileID: 2851423142316090800}
+  _view: {fileID: 0}
+  _transformView: {fileID: 0}
 --- !u!114 &7366819995200152588
 MonoBehaviour:
   m_ObjectHideFlags: 0

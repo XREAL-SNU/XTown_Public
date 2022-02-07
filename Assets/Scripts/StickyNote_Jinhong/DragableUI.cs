@@ -50,15 +50,7 @@ public class DragableUI : MonoBehaviour
     {
         if(!_stickyNote.isLocked)
         {
-            //if(!StickyNoteNetworkManager.Instance.networked)
-            //{
             moveUI();
-            //}
-            /*
-            else
-            {
-                _view.RPC("moveUI",RpcTarget.All);
-            }*/ 
         }
     }
     [PunRPC]
