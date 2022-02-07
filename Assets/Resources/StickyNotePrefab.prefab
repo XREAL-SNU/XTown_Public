@@ -1136,7 +1136,6 @@ GameObject:
   - component: {fileID: 5748472551505773439}
   - component: {fileID: 5748472551505773436}
   - component: {fileID: 5748472551505773437}
-  - component: {fileID: 5748472551505773434}
   - component: {fileID: 7942291634142183027}
   m_Layer: 5
   m_Name: Rotate
@@ -1247,19 +1246,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &5748472551505773434
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5748472551505773432}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b41ca50eb3349c143ba820ebd22be515, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _contentTransform: {fileID: 5748472551087484682}
 --- !u!114 &7942291634142183027
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1593,7 +1579,6 @@ GameObject:
   - component: {fileID: 5748472551609707836}
   - component: {fileID: 5748472551609707837}
   - component: {fileID: 5748472551609707834}
-  - component: {fileID: 5748472551609707839}
   - component: {fileID: 8296403393687777946}
   m_Layer: 5
   m_Name: Scale
@@ -1704,19 +1689,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &5748472551609707839
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5748472551609707832}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 04c8f691b8fb29d44bcb6d451b757851, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _contentTransform: {fileID: 5748472551087484682}
 --- !u!114 &8296403393687777946
 MonoBehaviour:
   m_ObjectHideFlags: 0

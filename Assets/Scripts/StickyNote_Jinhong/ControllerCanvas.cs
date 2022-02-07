@@ -127,13 +127,19 @@ public class ControllerCanvas : MonoBehaviour
     // ��ƼŰ��Ʈ ��Ʈ�ѷ��� Scale ��ư�� �巡������ ��
     public void OnDrag_Scale(PointerEventData eventData)
     {
-        _stickyNote.ContentCanvas.Scale(eventData.delta);
+        if(!StickyNoteNetworkManager.Instance.networked)
+            _stickyNote.ContentCanvas.Scale(eventData.delta);
+        else
+            _stickyNote.ContentCanvas._view.RPC("Scale",RpcTarget.All,eventData.delta);
     }
 
     // ��ƼŰ��Ʈ ��Ʈ�ѷ��� Rotate ��ư�� �巡������ ��
     public void OnDrag_Rotate(PointerEventData eventData)
     {
-        _stickyNote.ContentCanvas.Rotate(eventData.delta);
+        if(!StickyNoteNetworkManager.Instance.networked)
+            _stickyNote.ContentCanvas.Rotate(eventData.delta);
+        else
+            _stickyNote.ContentCanvas._view.RPC("Rotate",RpcTarget.All,eventData.delta);
     }
 
     // ��ƼŰ��Ʈ ��Ʈ�ѷ��� Edit ��ư�� ������ ��

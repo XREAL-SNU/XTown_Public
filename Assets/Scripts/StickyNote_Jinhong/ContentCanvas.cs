@@ -100,6 +100,7 @@ public class ContentCanvas : MonoBehaviour
         _transformView = GetComponent<PhotonTransformView>();
     }
 
+    [PunRPC]
     public void Scale(Vector2 delta)
     {
         if (delta.x > 0)
@@ -125,7 +126,7 @@ public class ContentCanvas : MonoBehaviour
         _rectTransform.sizeDelta = new Vector2(_newScaleX, _newScaleY);
         _collider.size = new Vector2(_rectTransform.rect.width, _rectTransform.rect.height);
     }
-
+    [PunRPC]
     public void Rotate(Vector2 delta)
     {
         if (delta.x > _rotationSensitivity)
